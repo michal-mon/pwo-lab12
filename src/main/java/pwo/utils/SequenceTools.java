@@ -8,50 +8,41 @@ import java.util.Collections;
 
 public class SequenceTools {
 
-    private static String getTerms(SequenceGenerator sg,
-            int from, int to, String sep) {
-
-        int i = from, stop = to;
+    private static String getTerms(SequenceGenerator sg, int from, int to, String sep){
         boolean reversed = from > to ? true : false;
-        
-        if(reversed) {
+        if (reversed) {
             int temp = from;
             from = to;
             to = temp;
-            i = from;
-            stop = to;
         }
+        int i = from, stop = to;
         ArrayList<String> terms = new ArrayList<String>();
-        
         while (true) {
             terms.add(sg.getTerm(i).toString());
-            if (i == stop) {
-                if(reversed) {
+            if (i == stop){
+                if (reversed) {
                     Collections.reverse(terms);
                 }
-                return String.join("\n", terms);
+                return String.join(sep, terms);
             }
             i += 1;
         }
     }
 
-
-    public static String getTermsAsColumn(SequenceGenerator sg, int from, int to) {
+    public static String getTermsAsColumn(SequenceGenerator sg, int from, int to){
         return getTerms(sg, from, to, "\n");
     }
 
-    public static String getTermsAsLine(SequenceGenerator sg, int from, int to) {
+    public static String getTermsAsLine(SequenceGenerator sg, int from, int to){
         return getTerms(sg, from, to, " ");
     }
 
-    public static boolean writeToFile(SequenceGenerator sg, int from, int to, String fileName) {
-
+    public static boolean writeToFile(SequenceGenerator sg,int from, int to, String fileName){
         try ( BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write(getTermsAsColumn(sg, from, to));
         } catch (IOException ex) {
             return false;
         }
-
         return true;
     }
 }
